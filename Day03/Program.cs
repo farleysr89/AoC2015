@@ -40,12 +40,66 @@ namespace Day03
                 }
                 houses.Add(new Tuple<int, int>(x, y));
             }
-            Console.WriteLine("Houses visited = " + houses.Count);
+            Console.WriteLine("Houses visited Part1 = " + houses.Count);
         }
 
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
+            int x1 = 0;
+            int y1 = 0;
+            int x2 = 0;
+            int y2 = 0;
+            HashSet<Tuple<int, int>> houses = new HashSet<Tuple<int, int>>();
+            houses.Add(new Tuple<int, int>(x1, y1));
+            bool robo = false;
+            foreach (char c in _input)
+            {
+                if (!robo)
+                {
+                    switch (c)
+                    {
+                        case '<':
+                            x1--;
+                            break;
+                        case '>':
+                            x1++;
+                            break;
+                        case '^':
+                            y1++;
+                            break;
+                        case 'v':
+                            y1--;
+                            break;
+                        default:
+                            break;
+                    }
+                    houses.Add(new Tuple<int, int>(x1, y1));
+                }
+                else
+                {
+                    switch (c)
+                    {
+                        case '<':
+                            x2--;
+                            break;
+                        case '>':
+                            x2++;
+                            break;
+                        case '^':
+                            y2++;
+                            break;
+                        case 'v':
+                            y2--;
+                            break;
+                        default:
+                            break;
+                    }
+                    houses.Add(new Tuple<int, int>(x2, y2));
+                }
+                robo = !robo;
+            }
+            Console.WriteLine("Houses visited Part2 = " + houses.Count);
         }
     }
 }
