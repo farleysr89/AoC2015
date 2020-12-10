@@ -46,7 +46,7 @@ namespace Day05
                 if (s.Where(c => vowels.Contains(c)).Count() < 3) continue;
                 niceStrings.Add(s);
             }
-            Console.WriteLine("Nice strings = " + niceStrings.Count());
+            Console.WriteLine("Nice strings Part 1 = " + niceStrings.Count());
         }
 
         static void SolvePart2()
@@ -54,12 +54,17 @@ namespace Day05
             string _input = File.ReadAllText("Input.txt");
             List<string> strings = _input.Split('\n').ToList();
             List<string> niceStrings = new List<string>();
-
+            string reg1 = @"(.)(.)(.*?)\1\2";
+            string reg2 = @"(.).\1";
             foreach (var s in strings)
             {
-
+                MatchCollection matches = Regex.Matches(s, reg1);
+                if (!matches.Any()) continue;
+                matches = Regex.Matches(s, reg2);
+                if (!matches.Any()) continue;
+                niceStrings.Add(s);
             }
-            Console.WriteLine("Nice strings = " + niceStrings.Count());
+            Console.WriteLine("Nice strings Part 2 = " + niceStrings.Count());
         }
     }
 }
