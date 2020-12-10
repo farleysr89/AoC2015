@@ -23,13 +23,20 @@ namespace Day04
                 if (tmp.Substring(0, 5) == "00000") break;
                 i++;
             }
-            Console.WriteLine("Answer is " + i);
-
+            Console.WriteLine("Answer to Part1 is " + i);
         }
 
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
+            int i = 0;
+            while (true)
+            {
+                string tmp = MD5Hash(_input + i.ToString());
+                if (tmp.Substring(0, 6) == "000000") break;
+                i++;
+            }
+            Console.WriteLine("Answer to Part2 is " + i);
         }
 
         // Function taken from here: https://www.godo.dev/tutorials/csharp-md5/
