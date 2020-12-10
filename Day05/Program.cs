@@ -52,6 +52,14 @@ namespace Day05
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
+            List<string> strings = _input.Split('\n').ToList();
+            List<string> niceStrings = new List<string>();
+
+            foreach (var s in strings)
+            {
+
+            }
+            Console.WriteLine("Nice strings = " + niceStrings.Count());
         }
     }
 }
