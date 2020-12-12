@@ -20,18 +20,33 @@ namespace Day08
             List<string> data = _input.Split('\n').ToList();
             int total = 0;
             int newTotal = 0;
-            foreach(var s in data)
+            foreach (var s in data)
             {
                 total += s.Length;
                 var a = Regex.Unescape(s);
                 newTotal += a.Length - 2;
             }
-            Console.WriteLine("Difference = " + (total - newTotal));
+            Console.WriteLine("Difference Part 1 = " + (total - newTotal));
         }
 
         static void SolvePart2()
         {
-            string _input = File.ReadAllText("Input.txt");
+            string _input = File.ReadAllText(@"Input.txt");
+            List<string> data = _input.Split('\n').ToList();
+
+            int total = 0;
+            int newTotal = 0;
+            foreach (var s in data)
+            {
+                total += s.Length;
+                newTotal += 2;
+                foreach (char c in s)
+                {
+                    newTotal += c == '\\' || c == '\"' ? 2 : 1;
+                }
+            }
+
+            Console.WriteLine("Difference Part 2 = " + (newTotal - total));
         }
     }
 }
