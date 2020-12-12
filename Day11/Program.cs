@@ -8,11 +8,11 @@ namespace Day11
     {
         static void Main(string[] args)
         {
-            SolvePart1();
-            SolvePart2();
+            string pass = SolvePart1();
+            SolvePart2(pass);
         }
 
-        static void SolvePart1()
+        static string SolvePart1()
         {
             string _input = File.ReadAllText("Input.txt");
             string pass = _input;
@@ -20,12 +20,18 @@ namespace Day11
             {
                 pass = Increment(pass);
             }
-            Console.WriteLine("Next password = " + pass);
+            Console.WriteLine("Next password Part 1 = " + pass);
+            return pass;
         }
 
-        static void SolvePart2()
+        static void SolvePart2(string pass)
         {
-            string _input = File.ReadAllText("Input.txt");
+            pass = Increment(pass);
+            while (!Validate(pass))
+            {
+                pass = Increment(pass);
+            }
+            Console.WriteLine("Next password Part 2 = " + pass);
         }
 
         static bool Validate(string pass)
