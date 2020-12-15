@@ -65,13 +65,67 @@ namespace Day13
                 totals.Add(tmp);
                 if (tmp > maxHappiness) maxHappiness = tmp;
             }
-            //Console.WriteLine(totals.OrderByDescending(x => x).First());
             Console.WriteLine("Max Happiness = " + maxHappiness);
         }
 
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
+            List<string> data = _input.Split('\n').ToList();
+            List<Relation> relations = new List<Relation>();
+            HashSet<string> guests = new HashSet<string>();
+            foreach (var s in data)
+            {
+                var x = s.Split(" ");
+                bool gain = x[2] == "gain";
+                var s1 = x[0];
+                var s2 = x[10].Remove(x[10].Length - 1, 1);
+                guests.Add(s1);
+                guests.Add(s2);
+                if (relations.Any(t => t.guests.Contains(s1) && t.guests.Contains(s2)))
+                {
+                    foreach (var r in relations)
+                    {
+                        if (r.guests.Contains(s1) && r.guests.Contains(s2))
+                        {
+                            r.happiness += gain ? int.Parse(x[3]) : int.Parse(x[3]) * -1;
+                        }
+                    }
+                }
+                else
+                {
+                    string[] g = new string[2];
+                    g[0] = s1;
+                    g[1] = s2;
+                    var relation = new Relation { guests = g, happiness = gain ? int.Parse(x[3]) : int.Parse(x[3]) * -1 };
+                    relations.Add(relation);
+                }
+            }
+            foreach (var g in guests)
+            {
+                relations.Add(new Relation { guests = new string[] { "Santa", g }, happiness = 0 });
+            }
+            guests.Add("Santa");
+            var sortedRelations = relations.OrderByDescending(x => x.happiness).ToList();
+            int maxHappiness = int.MinValue;
+            List<int> totals = new List<int>();
+            foreach (var r in sortedRelations)
+            {
+                HashSet<string> visited = new HashSet<string>
+                {
+                    r.guests[0],
+                    r.guests[1]
+                };
+                var tmpRelations = new List<Relation>(sortedRelations);
+                tmpRelations.Remove(r);
+                int tmp = CheckMaxRoute(tmpRelations, visited, guests, r.guests[1], r.happiness, r.guests[0]);
+                totals.Add(tmp);
+                if (tmp > maxHappiness) maxHappiness = tmp;
+                tmp = CheckMaxRoute(tmpRelations, visited, guests, r.guests[0], r.happiness, r.guests[1]);
+                totals.Add(tmp);
+                if (tmp > maxHappiness) maxHappiness = tmp;
+            }
+            Console.WriteLine("Max Happiness = " + maxHappiness);
         }
 
         public static int CheckMaxRoute(List<Relation> relations, HashSet<string> added, HashSet<string> guests, string last, int happiness, string first)
