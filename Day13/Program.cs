@@ -25,9 +25,17 @@ namespace Day13
                 bool gain = x[2] == "gain";
                 var s1 = x[0];
                 var s2 = x[10].Remove(x[10].Length - 1, 1);
-                if (relations.Any(r => r.guests.Contains(s1) && r.guests.Contains(s2)))
+                guests.Add(s1);
+                guests.Add(s2);
+                if (relations.Any(t => t.guests.Contains(s1) && t.guests.Contains(s2)))
                 {
-                    relations.Where(r => r.guests.Contains(s1) && r.guests.Contains(s2)).Select(f => { f.happiness += gain ? int.Parse(x[3]) : int.Parse(x[3]) * -1; return f; });
+                    foreach (var r in relations)
+                    {
+                        if (r.guests.Contains(s1) && r.guests.Contains(s2))
+                        {
+                            r.happiness += gain ? int.Parse(x[3]) : int.Parse(x[3]) * -1;
+                        }
+                    }
                 }
                 else
                 {
@@ -38,7 +46,27 @@ namespace Day13
                     relations.Add(relation);
                 }
             }
-            Console.WriteLine();
+            var sortedRelations = relations.OrderByDescending(x => x.happiness).ToList();
+            int maxHappiness = int.MinValue;
+            List<int> totals = new List<int>();
+            foreach (var r in sortedRelations)
+            {
+                HashSet<string> visited = new HashSet<string>
+                {
+                    r.guests[0],
+                    r.guests[1]
+                };
+                var tmpRelations = new List<Relation>(sortedRelations);
+                tmpRelations.Remove(r);
+                int tmp = CheckMaxRoute(tmpRelations, visited, guests, r.guests[1], r.happiness, r.guests[0]);
+                totals.Add(tmp);
+                if (tmp > maxHappiness) maxHappiness = tmp;
+                tmp = CheckMaxRoute(tmpRelations, visited, guests, r.guests[0], r.happiness, r.guests[1]);
+                totals.Add(tmp);
+                if (tmp > maxHappiness) maxHappiness = tmp;
+            }
+            //Console.WriteLine(totals.OrderByDescending(x => x).First());
+            Console.WriteLine("Max Happiness = " + maxHappiness);
         }
 
         static void SolvePart2()
@@ -46,21 +74,22 @@ namespace Day13
             string _input = File.ReadAllText("Input.txt");
         }
 
-        public static int CheckMaxRoute(List<Relation> routes, HashSet<string> added, HashSet<string> guests, string last, int happiness)
+        public static int CheckMaxRoute(List<Relation> relations, HashSet<string> added, HashSet<string> guests, string last, int happiness, string first)
         {
-            if (added.Count == guests.Count) return happiness;
+            if (added.Count == guests.Count) return happiness + relations.First(x => x.guests.Contains(last) && x.guests.Contains(first)).happiness;
+
 
             int maxHappiness = int.MinValue;
-            foreach (var r in routes.Where(x => x.guests.Contains(last) && (!added.Contains(x.guests[1]) || !added.Contains(x.guests[0]))))
+            foreach (var r in relations.Where(x => x.guests.Contains(last) && (!added.Contains(x.guests[1]) || !added.Contains(x.guests[0]))))
             {
                 HashSet<string> tmpVisited = new HashSet<string>(added)
                 {
                     r.guests[1],
                     r.guests[0]
                 };
-                var tmpRoutes = new List<Relation>(routes);
+                var tmpRoutes = new List<Relation>(relations);
                 tmpRoutes.Remove(r);
-                int tmp = CheckMaxRoute(tmpRoutes, tmpVisited, guests, last == r.guests[1] ? r.guests[0] : r.guests[1], happiness + r.happiness);
+                int tmp = CheckMaxRoute(tmpRoutes, tmpVisited, guests, last == r.guests[1] ? r.guests[0] : r.guests[1], happiness + r.happiness, first);
                 if (tmp > maxHappiness) maxHappiness = tmp;
             }
             return maxHappiness;
