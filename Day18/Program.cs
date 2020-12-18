@@ -42,8 +42,6 @@ namespace Day18
                         if (!lights[x, y] && count == 3) newLights[x, y] = true;
                     }
                 }
-
-
                 lights = (bool[,])newLights.Clone();
             }
             int lightCount = 0;
