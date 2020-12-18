@@ -37,7 +37,19 @@ namespace Day19
                     rules.Add(new Rule { input = r[0], output = r[1] });
                 }
             }
-            Console.WriteLine();
+            HashSet<string> outputs = new HashSet<string>();
+            foreach (var r in rules)
+            {
+                for (int i = 0; i < compound.Length - (r.input.Length - 1); i++)
+                {
+                    if (compound.Substring(i, r.input.Length) == r.input)
+                    {
+                        var newString = compound.Substring(0, i) + r.output + compound.Substring(i + r.input.Length);
+                        outputs.Add(newString);
+                    }
+                }
+            }
+            Console.WriteLine("Total Possibilities = " + outputs.Count());
         }
 
         static void SolvePart2()
