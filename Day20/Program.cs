@@ -37,14 +37,34 @@ namespace Day20
                 }
                 count++;
             }
-            Console.WriteLine("First house is " + min);
+            Console.WriteLine("First house in Part 1 is " + min);
         }
 
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
             List<string> data = _input.Split('\n').ToList();
-            Console.WriteLine("");
+            int target = int.Parse(data[0]);
+            int[] houses = new int[3600000];
+            for (int i = 1; i <= 3600000; i++)
+            {
+                for (int j = i; j < 3600000 && j <= i * 50; j += i)
+                {
+                    houses[j] += i * 11;
+                }
+            }
+            int min = 0;
+            int count = 0;
+            foreach (var i in houses)
+            {
+                if (i >= target)
+                {
+                    min = count;
+                    break;
+                }
+                count++;
+            }
+            Console.WriteLine("First house in Part 1 is " + min);
         }
     }
 }
