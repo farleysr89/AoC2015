@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Day19
 {
@@ -55,6 +56,12 @@ namespace Day19
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
+            List<string> data = _input.Split('\n').ToList();
+            string s = data.Last();
+            int l = Regex.Matches(s, "[A-Z]").Count;
+            int c = Regex.Matches(s, "Ar").Count + Regex.Matches(s, "Rn").Count;
+            int y = Regex.Matches(s, "Y").Count;
+            Console.WriteLine("Minimum steps = " + (l - c - y * 2 - 1));
         }
     }
     class Rule
