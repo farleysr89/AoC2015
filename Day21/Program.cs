@@ -17,7 +17,7 @@ namespace Day21
         {
             string _input = File.ReadAllText("Input.txt");
             List<string> data = _input.Split('\n').ToList();
-            int hp, damage, armor;
+            int hp = 0, damage = 0, armor = 0;
             foreach (var s in data)
             {
                 if (s == "") continue;
@@ -48,7 +48,7 @@ namespace Day21
             List<Ring> rings = new List<Ring>
             {
                 new Ring { name = "", cost = 0, armor = 0 },
-                new Ring { name = "", cost = 0, armor = 0 },
+                new Ring { name = " ", cost = 0, armor = 0 },
                 new Ring { name = "Damage +1", cost = 25, damage = 1 },
                 new Ring { name = "Damage +2", cost = 50, damage = 2 },
                 new Ring { name = "Damage +3", cost = 100, damage = 3 },
@@ -56,7 +56,26 @@ namespace Day21
                 new Ring { name = "Armor +2", cost = 40, armor = 2 },
                 new Ring { name = "Armor +3", cost = 80, armor = 3 }
             };
-            Console.WriteLine("");
+            int minCost = int.MaxValue;
+            foreach (var w in weapons)
+            {
+                foreach (var a in armors)
+                {
+                    foreach (var r in rings)
+                    {
+                        foreach (var rr in rings.Where(x => x.name != r.name))
+                        {
+                            int cost = w.cost + a.cost + r.cost + rr.cost;
+                            if (cost >= minCost) continue;
+                            else if (Fight(hp, damage, armor, 100, w.damage + r.damage + rr.damage, a.armor + r.armor + rr.armor))
+                            {
+                                minCost = cost;
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("Minimum cost = " + minCost);
         }
 
         static void SolvePart2()
@@ -64,6 +83,13 @@ namespace Day21
             string _input = File.ReadAllText("Input.txt");
             List<string> data = _input.Split('\n').ToList();
             Console.WriteLine("");
+        }
+
+        static bool Fight(int hp1, int damage1, int armor1, int hp2, int damage2, int armor2)
+        {
+            int turns1 = (int)Math.Ceiling((double)hp1 / Math.Max(damage2 - armor1, 1));
+            int turns2 = (int)Math.Ceiling((double)hp2 / Math.Max(damage1 - armor2, 1));
+            return turns2 >= turns1;
         }
     }
     class Weapon
