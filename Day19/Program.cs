@@ -8,7 +8,7 @@ namespace Day19
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             SolvePart1();
             SolvePart2();
@@ -45,7 +45,7 @@ namespace Day19
                 {
                     if (compound.Substring(i, r.input.Length) == r.input)
                     {
-                        var newString = compound.Substring(0, i) + r.output + compound.Substring(i + r.input.Length);
+                        var newString = compound.Substring(0, i) + r.output + compound[(i + r.input.Length)..];
                         outputs.Add(newString);
                     }
                 }

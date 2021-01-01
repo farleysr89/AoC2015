@@ -7,17 +7,17 @@ namespace Day16
 {
     class Program
     {
-        static int children = 3;
-        static int cats = 7;
-        static int samoyeds = 2;
-        static int pomeranians = 3;
-        static int akitas = 0;
-        static int vizslas = 0;
-        static int goldfish = 5;
-        static int trees = 3;
-        static int cars = 2;
-        static int perfumes = 1;
-        static void Main(string[] args)
+        static readonly int children = 3;
+        static readonly int cats = 7;
+        static readonly int samoyeds = 2;
+        static readonly int pomeranians = 3;
+        static readonly int akitas = 0;
+        static readonly int vizslas = 0;
+        static readonly int goldfish = 5;
+        static readonly int trees = 3;
+        static readonly int cars = 2;
+        static readonly int perfumes = 1;
+        static void Main()
         {
             SolvePart1();
             SolvePart2();

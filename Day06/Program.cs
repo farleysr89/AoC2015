@@ -7,7 +7,7 @@ namespace Day06
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             SolvePart1();
             SolvePart2();
@@ -18,11 +18,11 @@ namespace Day06
             string _input = File.ReadAllText("Input.txt");
             List<string> data = _input.Split('\n').ToList();
             List<Instruction> instructions = new List<Instruction>();
-            foreach(var s in data)
+            foreach (var s in data)
             {
                 Instruction i = new Instruction();
                 var x = s.Split(" ");
-                if(x[0] == "toggle")
+                if (x[0] == "toggle")
                 {
                     i.command = x[0];
                     var xs = x[1].Split(",");
@@ -45,12 +45,12 @@ namespace Day06
                 instructions.Add(i);
             }
             bool[,] lights = new bool[1000, 1000];
-            foreach(var i in instructions)
+            foreach (var i in instructions)
             {
                 switch (i.command)
                 {
                     case "toggle":
-                        for(int x = i.x1; x <= i.x2; x++)
+                        for (int x = i.x1; x <= i.x2; x++)
                         {
                             for (int y = i.y1; y <= i.y2; y++)
                             {
@@ -81,7 +81,7 @@ namespace Day06
                 }
             }
             int count = 0;
-            foreach(var r in lights)
+            foreach (var r in lights)
             {
                 if (r) count++;
             }
@@ -147,7 +147,7 @@ namespace Day06
                         {
                             for (int y = i.y1; y <= i.y2; y++)
                             {
-                                lights[x, y] = Math.Max(lights[x, y] - 1,0);
+                                lights[x, y] = Math.Max(lights[x, y] - 1, 0);
                             }
                         }
                         break;
@@ -158,7 +158,7 @@ namespace Day06
             long count = 0;
             foreach (var r in lights)
             {
-                count+=r;
+                count += r;
             }
             Console.WriteLine("Lighted lights for part 2 = " + count);
         }

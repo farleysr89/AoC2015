@@ -8,7 +8,7 @@ namespace Day17
     class Program
     {
         static readonly int eggnog = 150;
-        static void Main(string[] args)
+        static void Main()
         {
             SolvePart1();
             SolvePart2();
