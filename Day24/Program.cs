@@ -25,34 +25,13 @@ namespace Day24
             int parcelSize = total / 3;
             int[] dataArr = data.OrderByDescending(x => x).ToArray();
             Console.WriteLine("Total = " + total + " parcal size = " + parcelSize);
-            int tmpTotal = 0;
-            int index1 = 0;
-            List<List<int>> solutions = new List<List<int>>();
+            int index1 = 1;
+            HashSet<List<int>> solutions = new HashSet<List<int>>();
             foreach (int i in dataArr)
             {
-                List<int> sol = new List<int>
-                {
-                    i
-                };
-                tmpTotal = i;
-                int index2 = index1 + 1;
-                while (true)
-                {
-                    if (index2 >= dataArr.Length) break;
-                    if (dataArr[index2] + tmpTotal > parcelSize)
-                    {
-                        index2++;
-                        continue;
-                    }
-                    sol.Add(dataArr[index2]);
-                    tmpTotal += dataArr[index2];
-                    if (tmpTotal == parcelSize)
-                    {
-                        solutions.Add(sol);
-                        break;
-                    }
-                    index2++;
-                }
+                var tmp = new List<int> { i };
+                var tmpSol = GetSolutions(tmp, dataArr[index1..], solutions, i, parcelSize);
+                if (tmpSol != null) solutions.IntersectWith(tmpSol);
                 index1++;
             }
             int min = solutions.Min(x => x.Count);
@@ -64,7 +43,7 @@ namespace Day24
                 {
                     qe *= i;
                 }
-                Console.WriteLine("QE of solution is " + qe);
+                Console.WriteLine("QE of solution Part 1 is " + qe);
                 return;
             }
             long smallestQE = long.MaxValue;
@@ -77,14 +56,78 @@ namespace Day24
                 }
                 if (tmpQE < smallestQE) smallestQE = tmpQE;
             }
-            Console.WriteLine("QE of solution is " + smallestQE);
+            Console.WriteLine("QE of solution Part 1 is " + smallestQE);
         }
 
         static void SolvePart2()
         {
             string _input = File.ReadAllText("Input.txt");
-            List<string> data = _input.Split('\n').ToList();
-            Console.WriteLine("");
+            List<int> data = _input.Split('\n').Select(x => int.Parse(x)).ToList();
+            int total = 0;
+            foreach (var s in data)
+            {
+                total += s;
+            }
+            int parcelSize = total / 4;
+            int[] dataArr = data.OrderByDescending(x => x).ToArray();
+            Console.WriteLine("Total = " + total + " parcal size = " + parcelSize);
+            int index1 = 1;
+            HashSet<List<int>> solutions = new HashSet<List<int>>();
+            foreach (int i in dataArr)
+            {
+                var tmp = new List<int> { i };
+                var tmpSol = GetSolutions(tmp, dataArr[index1..], solutions, i, parcelSize);
+                if (tmpSol != null) solutions.IntersectWith(tmpSol);
+                index1++;
+            }
+            int min = solutions.Min(x => x.Count);
+            List<List<int>> smallestSolutions = solutions.Where(x => x.Count == min).ToList();
+            if (smallestSolutions.Count == 1)
+            {
+                int qe = 1;
+                foreach (var i in smallestSolutions.First())
+                {
+                    qe *= i;
+                }
+                Console.WriteLine("QE of solution Part 2 is " + qe);
+                return;
+            }
+            long smallestQE = long.MaxValue;
+            foreach (var l in smallestSolutions)
+            {
+                long tmpQE = 1;
+                foreach (var i in l)
+                {
+                    tmpQE *= i;
+                }
+                if (tmpQE < smallestQE) smallestQE = tmpQE;
+            }
+            Console.WriteLine("QE of solution Part 2 is " + smallestQE);
+        }
+        static HashSet<List<int>> GetSolutions(List<int> curr, int[] dataArr, HashSet<List<int>> solutions, int total, int goal)
+        {
+            int index = 0;
+            foreach (int i in dataArr)
+            {
+                index++;
+                if (total + i > goal) continue;
+                if (total + i == goal)
+                {
+                    curr.Add(i);
+                    solutions.Add(curr);
+                    return solutions;
+                }
+                else
+                {
+                    var tmp = new List<int>(curr)
+                    {
+                        i
+                    };
+                    var tmpSol = GetSolutions(tmp, dataArr[index..], solutions, total + i, goal);
+                    if (tmpSol != null) solutions.IntersectWith(tmpSol);
+                }
+            }
+            return solutions;
         }
     }
 }
