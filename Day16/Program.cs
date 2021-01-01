@@ -33,7 +33,7 @@ namespace Day16
                 if (s == "") continue;
                 var line = s.Split(": ");
                 var a = new AuntSue { title = line[0] };
-                foreach (var i in s.Substring(s.IndexOf(":") + 1).Split(", "))
+                foreach (var i in s[(s.IndexOf(":") + 1)..].Split(", "))
                 {
                     var x = i.Trim().Split(": ");
                     if (x[0] == "children") a.children = int.Parse(x[1]);
@@ -79,7 +79,7 @@ namespace Day16
                 if (s == "") continue;
                 var line = s.Split(": ");
                 var a = new AuntSue { title = line[0] };
-                foreach (var i in s.Substring(s.IndexOf(":") + 1).Split(", "))
+                foreach (var i in s[(s.IndexOf(":") + 1)..].Split(", "))
                 {
                     var x = i.Trim().Split(": ");
                     if (x[0] == "children") a.children = int.Parse(x[1]);
