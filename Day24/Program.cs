@@ -23,7 +23,8 @@ namespace Day24
                 if (s == "") continue;
                 total += int.Parse(s);
             }
-            Console.WriteLine(total);
+            int parcelSize = total / 3;
+            Console.WriteLine("Total = " + total + " parcal size = " + parcelSize);
         }
 
         static void SolvePart2()
